@@ -1,2 +1,2 @@
-# klipper.macro.random_macros
-Random klipper macros
+# Random klipper macros
+
