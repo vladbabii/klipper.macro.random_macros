@@ -46,4 +46,51 @@ gcode:
     M84                 ; Disable steppers
 ```
 
+---
+
+```
+[gcode_macro START_PRINT]
+default_parameter_BED_TEMP: 50
+default_parameter_EXTRUDER_TEMP: 170
+gcode:
+  M140 S{BED_TEMP} ; set bed temp
+  M104 S170 ; Preheat Extruder
+  SET_GCODE_OFFSET Z=0.0; (Reset the G-Code Z offset)
+  G28 X0 Y0 Z0 ; Home XY
+  G21 ; metric values
+  G90 ; absolute positioning
+  M82 ; set extruder to absolute mode
+  M107 ; start with the fan off
+  M109 S170 ; Preheat extruder and wait
+  brush
+  G28 Z0 ; Home Z again
+  BED_MESH_PROFILE LOAD=DEFAULT
+  G0 X0 Y-12
+  status
+  M190 S{BED_TEMP}; heat bed (wait)
+  M109 S{EXTRUDER_TEMP}; heat hotend (wait)
+  G92 E0 ; Zero the extruder
+  brush
+  G0 E10 F500 ; prime the nozzle
+  G0 Z0
+  G0 X0 Y0
+  G1 Y60 E8 F500 ; Draw a priming/wiping line to the rear
+  G0 X1 Z0.15
+  G1 Y10 E16 F500 ; draw more priming/wiping
+  G92 E0 ; Zero the extruder
+
+[gcode_macro END_PRINT]
+gcode:
+  heaters_off
+  G91
+  G0 Z-.5 F2000
+  G0 Z5 E-5 F800
+  G90
+  G28 X0 Y295 F500
+  motors_off
+  BED_MESH_CLEAR
+```
+
+---
+
 
