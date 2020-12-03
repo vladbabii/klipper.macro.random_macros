@@ -41,3 +41,25 @@ gcode:
 
 ---
 
+```
+[gcode_macro load_filament]
+default_parameter_EXTRUDER: 200
+default_parameter_X: 410
+default_parameter_Y: 40
+default_parameter_Z: 10
+default_parameter_E: 160
+gcode:
+    {% if printer.toolhead.status == "Ready" %}
+        G90
+        G0 X{X} Y{Y}                #move to area where can easily load filament
+        M109 S{EXTRUDER}        #set hotend temperature and wait
+        M83                        #relative positioning on extruder    
+        G0 E{E} F400              #prime extruder
+        G92 E0
+        UPDATE_DELAYED_GCODE ID=notify_extruder_load DURATION=10
+    {% else %}
+        { printer.gcode.action_respond_info("Load Filament is disabled while printing!") }
+    {% endif %}
+```
+
+
