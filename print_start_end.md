@@ -93,4 +93,41 @@ gcode:
 
 ---
 
+```
+######################################################################
+# Start Print and End Print
+######################################################################
 
+[gcode_macro START_PRINT]
+default_parameter_BED_TEMP: 60
+default_parameter_EXTRUDER_TEMP: 190
+gcode:
+        M204 P500.00 R1000.00 T500.00
+        M220 S100
+        M221 S100
+        G29 
+    SET_GCODE_OFFSET Z=-4.3
+    G28 Z0
+        G92 E0 
+    G1 Z20 F3000
+    G1 X10.1 Y20 Z0.28 F5000.0
+    G1 X10.1 Y190.0 Z0.28 F1500.0 E15
+    G1 X10.4 Y190.0 Z0.28 F5000.0
+    G1 X10.4 Y20 Z0.28 F1500.0 E30
+    G92 E0
+    G1 Z2.0 F3000
+
+[gcode_macro END_PRINT]
+gcode:
+        G91
+        G1 E-2 F2700
+        G1 E-2 Z0.2 F2400
+    G1 X5 Y5 F3000
+    G1 Z10
+    G90
+      G1 X210 Y190
+    M84 X Y E
+    M106 S0
+    M104 S0
+    M140 S0
+```
