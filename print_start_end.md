@@ -131,3 +131,50 @@ gcode:
     M104 S0
     M140 S0
 ```
+
+
+---
+
+```
+#Pause/Resume Functionality
+[pause_resume]
+
+#Delayed gcode Functionality
+[delayed_gcode]
+
+[gcode_macro HEAT_SOAK]
+#uncomment HEAT_SOAK lines in PRINT_START to enable
+gcode:
+    G0 X60 Y60 Z10                                   ; move toolhead to centre
+    M106                                             ; run cooling fans at full power
+    PAUSE
+    UPDATE_DELAYED_GCODE ID=SOAK_TIME DURATION=300   ; resume after 300 seconds
+    M107                                             ; turn off cooling fans
+
+[delayed_gcode SOAK_TIME]
+gcode:
+    RESUME
+
+[gcode_macro SKIP]
+gcode:
+    UPDATE_DELAYED_GCODE ID=SOAK_TIME DURATION=0
+
+[gcode_macro PRINT_START]
+#   Use PRINT_START for the slicer starting script - please customise for your slicer of choice
+gcode:
+    CLEAR_PAUSE
+    G28                            ; home all axes
+    {% if printer.heater_bed.target >= 100 %}
+        HEAT_SOAK
+    {% endif %}
+    M109 S[first_layer_temperature]; set print head temperature and wait
+    G0 Y0 X40                      ; go to tongue of print bed
+    G1 Z0.2 F500.0                 ; move bed to nozzle
+    G92 E0.0                       ; reset extruder
+    G1 E2 F500                     ; pre-purge prime LENGTH SHOULD MATCH YOUR PRINT_END RETRACT
+    G1 X80 E8.0 F500.0             ; intro line 1
+    G1 Y0.3                        ; move in a little
+    G1 X40 E8.0 F500.0             ; second line
+    G92 E0.0                       ; reset extruder
+    G1 Z2.0                        ; move nozzle to prevent scratch
+```
