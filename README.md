@@ -1,6 +1,6 @@
 # Random klipper macros
 
-These were gathered from Klipper (unofficial) Discord at https://discord.gg/ZPg3fYF
+These were gathered from Klipper ( https://github.com/KevinOConnor/klipper ) unofficial Discord at https://discord.gg/ZPg3fYF
 
 All credit goes to their creators
 
