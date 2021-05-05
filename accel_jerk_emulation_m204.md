@@ -6,6 +6,8 @@ max_accel_to_decel:         5000
 111
 
 ```
+
+```
 [gcode_macro M204]
 rename_existing:            M204.1
 default_parameter_F:        0.75
